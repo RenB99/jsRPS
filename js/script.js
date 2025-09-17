@@ -15,18 +15,18 @@ function getComputerChoice() {
     } 
 }
 
-function getHumanChoice() {
-    let humanChoice = prompt("Let's play... Rock, Paper, or Scissors?");
-    humanChoice = humanChoice.toLowerCase();
+// function getHumanChoice() {
+//     let humanChoice = prompt("Let's play... Rock, Paper, or Scissors?");
+//     humanChoice = humanChoice.toLowerCase();
 
-    if (humanChoice != "rock" && humanChoice != "paper" && humanChoice != "scissors") {
-        console.log("Remember, pick one of 3 choices: Rock, Paper, or Scissors!");
-        console.log("Try again!");
-        return "Refresh and try again!!!";
-    } else {
-        return humanChoice;
-    }
-}
+//     if (humanChoice != "rock" && humanChoice != "paper" && humanChoice != "scissors") {
+//         console.log("Remember, pick one of 3 choices: Rock, Paper, or Scissors!");
+//         console.log("Try again!");
+//         return "Refresh and try again!!!";
+//     } else {
+//         return humanChoice;
+//     }
+// }
 
 function playGame() {
 
@@ -34,51 +34,129 @@ function playGame() {
     let computerScore = 0;
     let round = 1
 
-    function playRound(humanChoice, computerChoice) {
+    const body = document.querySelector("body");
+    body.style.backgroundColor = "silver";
 
-        humanChoice = getHumanChoice();
+    const options = document.createElement("div");
+
+    const text = document.createElement("p");
+    text.textContent = `I feel bored and lonely :(
+                        Oh, I know! Would you like to play a game with me?         please, pretty please with a cherry on top 🥹
+                        Is that a yes? you're the best 😘`;
+    text.style.color = "blue";
+    text.style.fontFamily = "ubuntu";
+
+    body.appendChild(options);
+    options.appendChild(text);
+
+    const rockBtn = document.createElement("button");
+    rockBtn.textContent = "Rock!"
+    rockBtn.style.margin = "5px";
+    rockBtn.style.border = "solid black 1px";
+    rockBtn.addEventListener("click", () => {
+        let humanChoice = "rock";
+        round += 1;
+        playRound(humanChoice, round);
+    });
+
+    const paperBtn = document.createElement("button");
+    paperBtn.textContent = "Paper!";
+    paperBtn.style.margin = "5px";
+    paperBtn.style.border = "solid black 1px";
+    paperBtn.addEventListener("click", () => {
+        let humanChoice = "paper";
+        round += 1;
+        playRound(humanChoice, round);
+    });
+
+    const scissorsBtn = document.createElement("button");
+    scissorsBtn.textContent = "Scissors!"
+    scissorsBtn.style.margin = "5px";
+    scissorsBtn.style.border = "solid black 1px";
+    scissorsBtn.addEventListener("click", () => {
+        let humanChoice = "scissors";
+        round += 1;
+        playRound(humanChoice, round);
+    })
+
+    
+
+    options.append(rockBtn, paperBtn, scissorsBtn);
+
+    const roundCount = document.createElement("div");
+    roundCount.textContent = "Round: " + round;
+    options.appendChild(roundCount);
+
+    const results = document.createElement("div");
+    results.textContent = "Results Board:";
+    results.style.border = "solid black 2px";
+    results.style.padding = "5px";
+    results.style.color = "maroon";
+    body.appendChild(results);
+
+    const resultsMessage = document.createElement("p");
+    results.appendChild(resultsMessage);
+
+
+
+    function playRound(humanChoice, round, computerChoice) {
+
+
+        //humanChoice = getHumanChoice();
         computerChoice = getComputerChoice();
+
 
         if (((humanChoice == "rock") && (computerChoice == "rock")) ||
             ((humanChoice == "paper") && (computerChoice == "paper")) ||
             ((humanChoice == "scissors") && (computerChoice == "scissors"))) {
-            console.log("It's a tie! You both picked " + capitalizeFirst(humanChoice) + ". No one gets a point...");
-            console.log("Your score is " + humanScore + ". The computer's score is " + computerScore + "."); //tie instances
+            resultsMessage.textContent = "It's a tie! You both picked " + capitalizeFirst(humanChoice) + ". No one gets a point...";
+            resultsMessage.textContent += "\nYour score is " + humanScore + ". The computer's score is " + computerScore + "."; //tie instances
 
         } else if (((humanChoice == "rock") && (computerChoice == "scissors")) ||
             ((humanChoice == "paper") && (computerChoice == "rock")) ||
             ((humanChoice == "scissors") && (computerChoice == "paper"))) {
             humanScore = humanScore + 1;
-            console.log("You picked " + capitalizeFirst(humanChoice) + ". The computer picked " + capitalizeFirst(computerChoice) + "!");
-            console.log("You got this round!");
-            console.log("Your score is " + humanScore + ". The Computer's score is " + computerScore + "."); //human win instances.
+            resultsMessage.textContent = "You picked " + capitalizeFirst(humanChoice) + ". The computer picked " + capitalizeFirst(computerChoice) + "!";
+            resultsMessage.textContent += "\nYou got this round!";
+            resultsMessage.textContent += "\nYour score is " + humanScore + ". The Computer's score is " + computerScore + "."; //human win instances.
         } else {
             computerScore = computerScore + 1;
-            console.log("You picked " + capitalizeFirst(humanChoice) + ". The computer picked " + capitalizeFirst(computerChoice) + "!");
-            console.log("Computer got this round!");
-            console.log("Your score is " + humanScore + ". The Computer's score is " + computerScore + ".")
+            resultsMessage.textContent = "You picked " + capitalizeFirst(humanChoice) + ". The computer picked " + capitalizeFirst(computerChoice) + "!";
+            resultsMessage.textContent += "\nComputer got this round!";
+            resultsMessage.textContent += "\nYour score is " + humanScore + ". The Computer's score is " + computerScore + ".";
         }
+        
+        if (round < 6) {
+            roundCount.textContent += "\nReady for the next round?";
+        } else if (round === 6) {
+            roundCount.textContent = "Round: " + round;
+            results.textContent = "Final results: Human got " + humanScore + " points, and Computer got " + computerScore + " points.";
+
+            if (humanScore > computerScore) {
+                results.textContent = "Congratulations, the grand prize goes to you!!!";
+                results.textContent += "\nFinal results: Human got " + humanScore + " points, and Computer got " + computerScore + " points.";
+                return;
+            } else if (humanScore < computerScore) {
+                results.textContent = "Computer is the grand winner this time... better luck next time!";
+                results.textContent += "\nFinal results: Human got " + humanScore + " points, and Computer got " + computerScore + " points.";
+                return;
+            } else {
+                results.textContent = "It really is a tie... Why don't you guys try again to declare the champion?!";
+                results.textContent += "\nFinal results: Human got " + humanScore + " points, and Computer got " + computerScore + " points.";
+                return;
+            }
+        } else if (round > 6) {
+            results.textContent = `I made it clear that the game is over -_- 
+                                   If you want to play some more, go ahead and refresh the page to wake me up!`
+        }
+
+        roundCount.textContent = "Round: " + round;
+
     }
 
-    while (round < 5) {
-        console.log("Round: " + round);
-        playRound();
-        console.log("Ready for the next round?")
-        ++round;
-    }
-    if (round === 5) {
-        console.log("Round: " + round);
-        playRound();
-        console.log("Final results: Human got " + humanScore + " points, and Computer got " + computerScore + " points.");
-        if (humanScore > computerScore) {
-            console.log("Congratulations, the grand prize goes to you!!!");
-        } else if (humanScore < computerScore) {
-            console.log("Computer is the grand winner this time... better luck next time!");
-        } else {
-            console.log("It really is a tie... Why don't you guys try again to declare the champion?!");
-        }
-        return;
-    }
+    
+
 }
 
 playGame();
+
